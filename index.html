@@ -38,14 +38,14 @@
   --shadow: 0 2px 12px rgba(84,46,145,0.08);
 }
 body { font-family: var(--font); background: var(--off-white); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.5; }
-
+ 
 /* HEADER */
 .header { background: var(--purple); padding: 0 28px; display: flex; align-items: center; justify-content: space-between; height: 58px; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 16px rgba(84,46,145,0.3); }
 .header-left { display: flex; align-items: center; gap: 12px; }
 .logo { background: var(--yellow); color: var(--purple); font-weight: 900; font-size: 15px; padding: 5px 11px; border-radius: 6px; }
 .header-title { color: var(--white); font-size: 16px; font-weight: 800; }
 .header-sub { color: rgba(255,255,255,0.5); font-size: 12px; font-weight: 600; }
-
+ 
 /* SCORE BAR */
 .score-bar { position: sticky; top: 58px; z-index: 90; background: var(--purple-dark); border-radius: 0 0 12px 12px; padding: 10px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; box-shadow: 0 4px 16px rgba(84,46,145,0.2); margin-bottom: 20px; }
 .score-bar-left { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
@@ -57,16 +57,16 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .pass-pill.pass { background: var(--yellow); color: var(--purple); }
 .pass-pill.fail { background: var(--red); color: var(--white); }
 .pass-pill.na { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.6); }
-
+ 
 /* PAGE */
 .page { max-width: 880px; margin: 0 auto; padding: 0 16px 80px; }
-
+ 
 /* CARDS */
 .card { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 20px; overflow: hidden; }
 .card-head { background: var(--purple-tint); padding: 14px 22px; border-bottom: 1.5px solid var(--grey-2); display: flex; align-items: center; gap: 10px; }
 .card-head h2 { font-size: 15px; font-weight: 800; color: var(--purple); }
 .card-body { padding: 20px 22px; }
-
+ 
 /* SETUP PANEL */
 .setup-panel { background: var(--purple); border-radius: var(--radius); padding: 18px 22px; margin-bottom: 20px; }
 .setup-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -78,7 +78,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .key-confirmed { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .key-status { display: flex; align-items: center; gap: 8px; color: var(--yellow); font-size: 13px; font-weight: 700; }
 .key-dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; flex-shrink: 0; }
-
+ 
 /* FORMS */
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media(max-width:580px){ .form-grid { grid-template-columns: 1fr; } }
@@ -88,7 +88,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(84,46,145,0.1); }
 .field textarea { resize: vertical; min-height: 160px; line-height: 1.6; }
 .field-full { grid-column: 1 / -1; }
-
+ 
 /* BUTTONS */
 .btn-primary { background: var(--purple); color: var(--white); border: none; border-radius: 8px; padding: 11px 24px; font-family: var(--font); font-size: 14px; font-weight: 800; cursor: pointer; transition: background 0.15s, transform 0.1s; display: inline-flex; align-items: center; gap: 7px; }
 .btn-primary:hover { background: var(--purple-dark); transform: translateY(-1px); }
@@ -100,18 +100,18 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .btn-ghost { background: none; border: 1.5px solid rgba(255,255,255,0.25); border-radius: 6px; padding: 5px 12px; font-family: var(--font); font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.15s; }
 .btn-ghost:hover { border-color: rgba(255,255,255,0.5); color: var(--white); }
 .btn-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-
+ 
 /* STATUS */
 .status { border-radius: 8px; padding: 13px 18px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 .status.loading { background: var(--blue-bg); color: var(--blue); }
 .status.error { background: var(--red-bg); color: var(--red); }
 .spinner { width: 16px; height: 16px; border: 2.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
 /* SECTION HEADERS */
 .section-head { background: var(--purple); color: var(--white); padding: 11px 22px; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: space-between; }
 .sec-score-display { color: var(--yellow); font-size: 13px; font-weight: 800; }
-
+ 
 /* CRITERIA ROWS */
 .crit-row { display: grid; grid-template-columns: 1fr auto; align-items: start; gap: 16px; padding: 13px 22px; border-bottom: 1px solid var(--grey-3); transition: background 0.15s; }
 .crit-row:last-child { border-bottom: none; }
@@ -124,7 +124,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .ai-reason { font-size: 12px; color: var(--purple-mid); font-style: italic; margin-top: 4px; line-height: 1.4; }
 .manual-flag { font-size: 11px; color: var(--orange); font-weight: 700; margin-top: 3px; display: flex; align-items: center; gap: 4px; }
 .ai-badge { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 800; background: var(--purple); color: var(--white); border-radius: 4px; padding: 2px 7px; margin-top: 4px; letter-spacing: 0.3px; }
-
+ 
 .score-select-wrap { display: flex; align-items: center; gap: 8px; flex-shrink: 0; padding-top: 2px; }
 .score-select { border: 1.5px solid var(--grey-2); border-radius: 8px; padding: 7px 10px; font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--purple); background: var(--white); outline: none; cursor: pointer; min-width: 80px; text-align: center; transition: border-color 0.2s, background 0.2s; appearance: none; }
 .score-select:focus { border-color: var(--purple); box-shadow: 0 0 0 3px rgba(84,46,145,0.1); }
@@ -133,7 +133,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .score-select.zero { background: var(--red-bg); border-color: var(--red); color: #cc3a42; }
 .score-select.na { background: var(--grey-3); border-color: var(--grey-1); color: var(--text-light); }
 .max-label { font-size: 12px; color: var(--text-light); white-space: nowrap; }
-
+ 
 /* FEEDBACK */
 .fb-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 0 22px 22px; }
 @media(max-width:560px){ .fb-grid { grid-template-columns: 1fr; } }
@@ -145,14 +145,14 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .fb-box.ebi label { color: #c47a00; }
 .fb-box.advisory { background: var(--blue-bg); grid-column: 1 / -1; }
 .fb-box.advisory label { color: #1a7acc; }
-
+ 
 .action-bar { padding: 16px 22px; border-top: 1.5px solid var(--grey-2); display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
-
+ 
 /* legend */
 .legend { display: flex; gap: 16px; flex-wrap: wrap; padding: 10px 22px 0; font-size: 12px; color: var(--text-light); }
 .legend-item { display: flex; align-items: center; gap: 5px; font-weight: 600; }
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
-
+ 
 @media print {
   .header, .score-bar, .setup-panel, .input-card, .status, .action-bar, .btn-row, .legend { display: none !important; }
   body { background: white; }
@@ -163,7 +163,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 </style>
 </head>
 <body>
-
+ 
 <header class="header">
   <div class="header-left">
     <span class="logo">HX</span>
@@ -171,7 +171,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
   </div>
   <span class="header-sub">Fastest 🏃 Smartest 🧠 Most Personal 💜</span>
 </header>
-
+ 
 <div class="score-bar">
   <div class="score-bar-left">
     <div>
@@ -185,9 +185,9 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
   </div>
   <span class="pass-pill na" id="passPill">Enter scores</span>
 </div>
-
+ 
 <div class="page">
-
+ 
   <!-- API KEY -->
   <div class="setup-panel" id="setupPanel">
     <div class="setup-row" id="setupRow">
@@ -203,7 +203,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
       <button class="btn-ghost" onclick="clearKey()">Change key</button>
     </div>
   </div>
-
+ 
   <!-- INPUT -->
   <div class="card input-card">
     <div class="card-head"><span style="font-size:18px">📋</span><h2>Case Details</h2></div>
@@ -255,26 +255,26 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
       </div>
     </div>
   </div>
-
+ 
   <!-- STATUS -->
   <div class="status hidden" id="statusBar">
     <div class="spinner"></div>
     <span id="statusText">Analysing email chain...</span>
   </div>
-
+ 
   <!-- SCORECARD (hidden until loaded) -->
   <div id="scorecard" class="hidden">
-
+ 
     <div class="legend">
       <div class="legend-item"><div class="legend-dot" style="background:var(--purple-tint);border:1px solid var(--purple)"></div> AI scored</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--yellow-tint);border:1px solid var(--orange)"></div> Needs manual check</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--white);border:1px solid var(--grey-2)"></div> Manual entry</div>
     </div>
-
+ 
     <!-- 🧠 SYSTEMS -->
     <div class="card" style="margin-top:12px">
       <div class="section-head"><span>🧠 Systems (Smart)</span><span class="sec-score-display" id="sec-systems-display">0 / 7</span></div>
-
+ 
       <div class="crit-row needs-check" id="row-agent_code">
         <div>
           <div class="crit-name">Agent code, supplier name & supplier code</div>
@@ -288,7 +288,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row needs-check" id="row-complaint_reason">
         <div>
           <div class="crit-name">Most applicable complaint reason</div>
@@ -301,7 +301,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 0.5</span>
         </div>
       </div>
-
+ 
       <div class="crit-row needs-check" id="row-child_case">
         <div>
           <div class="crit-name">Child case linked in Sprinklr</div>
@@ -315,7 +315,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 0.5</span>
         </div>
       </div>
-
+ 
       <div class="crit-row needs-check" id="row-care_notes">
         <div>
           <div class="crit-name">Notes left in CARE</div>
@@ -329,7 +329,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 0.5</span>
         </div>
       </div>
-
+ 
       <div class="crit-row needs-check" id="row-reclaim_code">
         <div>
           <div class="crit-name">Correct reclaim code used</div>
@@ -343,7 +343,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 2</span>
         </div>
       </div>
-
+ 
       <div class="crit-row needs-check" id="row-gdpr">
         <div>
           <div class="crit-name">GDPR check</div>
@@ -357,7 +357,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 2</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-subject_title">
         <div>
           <div class="crit-name">Subject title</div>
@@ -372,11 +372,11 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
         </div>
       </div>
     </div>
-
+ 
     <!-- 🏃 CONTENT -->
     <div class="card">
       <div class="section-head"><span>🏃 Content (Fast)</span><span class="sec-score-display" id="sec-content-display">0 / 4.5</span></div>
-
+ 
       <div class="crit-row" id="row-resolved_quickly">
         <div>
           <div class="crit-name">Could the complaint have been resolved more quickly?</div>
@@ -390,7 +390,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-supplier_agreements">
         <div>
           <div class="crit-name">Supplier pre-agreed outcomes used</div>
@@ -404,7 +404,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 2</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-paraphrased">
         <div>
           <div class="crit-name">Responses paraphrased where necessary</div>
@@ -418,7 +418,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-goodwill_notes">
         <div>
           <div class="crit-name">Goodwill gesture notes</div>
@@ -434,11 +434,11 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
         </div>
       </div>
     </div>
-
+ 
     <!-- 💜 PERSONAL -->
     <div class="card">
       <div class="section-head"><span>💜 Interaction with Customer (Personal)</span><span class="sec-score-display" id="sec-personal-display">0 / 9</span></div>
-
+ 
       <div class="crit-row" id="row-opening">
         <div>
           <div class="crit-name">Opening</div>
@@ -452,7 +452,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-all_areas">
         <div>
           <div class="crit-name">All areas of complaint addressed</div>
@@ -466,7 +466,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-prevention">
         <div>
           <div class="crit-name">Steps to prevent recurrence advised</div>
@@ -480,7 +480,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-positive_close">
         <div>
           <div class="crit-name">Positive close</div>
@@ -494,7 +494,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-empathy">
         <div>
           <div class="crit-name">Empathy and understanding shown</div>
@@ -508,7 +508,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 2</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-spelling">
         <div>
           <div class="crit-name">Spelling</div>
@@ -522,7 +522,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-grammar">
         <div>
           <div class="crit-name">Grammar</div>
@@ -536,7 +536,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 1</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-personalisation">
         <div>
           <div class="crit-name">Personalisation</div>
@@ -551,11 +551,11 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
         </div>
       </div>
     </div>
-
+ 
     <!-- ✨ AI USAGE -->
     <div class="card">
       <div class="section-head"><span>✨ AI Usage (Fast)</span><span class="sec-score-display" id="sec-ai-display">0 / 1</span></div>
-
+ 
       <div class="crit-row" id="row-ai_tone">
         <div>
           <div class="crit-name">AI used correctly</div>
@@ -569,7 +569,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
           <span class="max-label">/ 0.5</span>
         </div>
       </div>
-
+ 
       <div class="crit-row" id="row-uk_english">
         <div>
           <div class="crit-name">UK English used</div>
@@ -584,7 +584,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
         </div>
       </div>
     </div>
-
+ 
     <!-- FEEDBACK -->
     <div class="card">
       <div class="card-head"><span style="font-size:18px">💬</span><h2>Feedback</h2></div>
@@ -608,19 +608,19 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
         <button class="btn-outline" onclick="resetForm()">🔄 New scorecard</button>
       </div>
     </div>
-
+ 
   </div><!-- end scorecard -->
 </div>
-
+ 
 <script>
 const SEC_MAX = { systems: 7, content: 4.5, personal: 9, ai: 1 };
-
+ 
 // ── API KEY ──
 let apiKey = sessionStorage.getItem('hx_qa_key') || '';
 if (apiKey) showKeyConfirmed();
-
+ 
 document.getElementById('reviewDate').value = new Date().toISOString().split('T')[0];
-
+ 
 function saveKey() {
   const k = document.getElementById('apiKeyInput').value.trim();
   if (!k) { alert('Please paste your API key.'); return; }
@@ -639,54 +639,54 @@ function clearKey() {
   document.getElementById('setupPanel').classList.remove('hidden');
   document.getElementById('keyConfirmedPanel').classList.add('hidden');
 }
-
+ 
 // ── DEMO ──
 const DEMO = {
   agent: 'Megan White', reviewer: 'Jayne Curtis', caseNum: 'CAS-789012',
   email: `From: patricia.hammond@email.com
 To: complaints@holidayextras.com
 Subject: Complaint - HX123456 / RAD789
-
+ 
 Hello,
-
+ 
 I am writing to complain about my recent stay at the Radisson Blu Hotel at Heathrow Airport. We arrived on 14th March for a one-night stay before our flight to Barcelona for my husband's 50th birthday. When we checked in, the room we were given was nothing like what we had booked - it was right next to the lift and incredibly noisy. We barely slept. I raised it at reception and they were unhelpful. This completely ruined the start of our holiday.
-
+ 
 I would like to know what Holiday Extras are going to do about this.
-
+ 
 Kind regards,
 Patricia Hammond
-
+ 
 ---
-
+ 
 From: megan.white@holidayextras.com
 To: patricia.hammond@email.com
 Subject: Complaint - HX123456 / RAD789
-
+ 
 Dear Patricia,
-
+ 
 Thank you for getting in touch with us and for taking the time to share your feedback about your recent stay at the Radisson Blu Hotel, Heathrow Airport.
-
+ 
 I am so sorry to hear that your room was located next to the lift and that the noise disrupted your sleep, especially given that this was the start of such a special trip for your husband's 50th birthday. I completely understand how disappointing this must have been, and I am sorry that the hotel reception were not able to help you at the time.
-
+ 
 I have raised a formal complaint with the Radisson Blu Hotel on your behalf and have asked them to investigate and respond to us directly. As soon as I receive their response, I will be in touch with you straight away.
-
+ 
 In the meantime, please be assured that Holiday Extras monitor all feedback we receive about our suppliers. If there are any recurring themes for any provider, we take action to help prevent our other customers experiencing the same. Thank you for bringing this to our attention.
-
+ 
 I hope that despite this difficult start, you and your husband had a wonderful time in Barcelona celebrating his milestone birthday.
-
+ 
 Kind regards,
 Megan White
 Customer Experience Team
 Holiday Extras`
 };
-
+ 
 function loadDemo() {
   document.getElementById('agentSelect').value = DEMO.agent;
   document.getElementById('reviewerSelect').value = DEMO.reviewer;
   document.getElementById('caseNum').value = DEMO.caseNum;
   document.getElementById('emailChain').value = DEMO.email;
 }
-
+ 
 // ── MANUAL ONLY ──
 function manualOnly() {
   const email = document.getElementById('emailChain').value.trim();
@@ -697,7 +697,7 @@ function manualOnly() {
   document.getElementById('scorecard').classList.remove('hidden');
   document.getElementById('scorecard').scrollIntoView({ behavior: 'smooth' });
 }
-
+ 
 // ── AI SCORE ──
 async function handleScore() {
   if (!apiKey) {
@@ -709,40 +709,40 @@ async function handleScore() {
   if (!email) { alert('Please paste the email chain.'); return; }
   const agent = document.getElementById('agentSelect').value;
   if (!agent) { alert('Please select an agent.'); return; }
-
+ 
   document.getElementById('scoreBtn').disabled = true;
   showStatus('Analysing email chain against QA framework...');
   clearScores();
   document.getElementById('scorecard').classList.remove('hidden');
-
+ 
   const prompt = `You are a QA reviewer for Holiday Extras Customer Experience team. Analyse this email chain and score it.
-
+ 
 RESPOND ONLY WITH VALID JSON. No preamble, no markdown, no backticks.
-
+ 
 EMAIL CHAIN:
 ${email}
-
+ 
 Score ONLY criteria you can determine from the email itself. Leave score as null for anything you cannot verify.
-
+ 
 The following ALWAYS get null (cannot see from email): agent_code, complaint_reason, child_case, care_notes, reclaim_code, gdpr.
-
+ 
 CRITERIA TO SCORE (where possible):
 - subject_title: Subject has booking ref + supplier ref if applicable. Max 0.5. Scores: 0 or 0.5.
 - resolved_quickly: Could it resolve faster with fewer contacts? Max 1. Scores: 0 or 1.
 - supplier_agreements: Pre-agreed supplier outcomes used if applicable. Max 2. Scores: 0 or 2. If N/A score 2.
 - paraphrased: Responses paraphrased to/from supplier. Max 1. Scores: 0 or 1.
 - goodwill_notes: Goodwill notes left if goodwill given. Max 0.5. Scores: 0 or 0.5. If no goodwill given score 0.5.
-- opening: Thanked customer, patience if 7+ day wait, named supplier. Max 1. Scores: 0 or 1.
+- opening: Thanked customer, mentioned patience if 7+ day wait, named the supplier. Max 1. Scores: 0 or 1. Score 1 if the agent introduced themselves and named the supplier. Do not penalise for not thanking if the case does not warrant it (e.g. unfavourable outcome delivered promptly).
 - all_areas: All complaint areas addressed. Max 1. Scores: 0 or 1.
-- prevention: Steps to prevent recurrence advised. Max 1. Scores: 0 or 1.
+- prevention: Steps to prevent recurrence advised — either a supplier action or the HX monitoring statement. Max 1. Scores: 0 or 1. Only score 0 if no prevention statement is present at all. Do not require a specific form of words — any genuine prevention or monitoring statement counts.
 - positive_close: Ended on a positive note. Max 1. Scores: 0 or 1.
-- empathy: Empathy shown throughout. Max 2. Scores: 0, 1, or 2.
+- empathy: Empathy shown throughout. Max 2. Scores: 0, 1, or 2. Score 2 for warm, genuine empathy woven throughout. Score 1 if empathy is present but brief or limited to one line. Score 0 only if there is no empathy at all. Do not penalise an agent for delivering an unfavourable outcome professionally — an apology and clear explanation in a difficult case can still demonstrate empathy.
 - spelling: 0=3+ mistakes, 0.5=1-2 mistakes, 1=none. Max 1.
 - grammar: 0=3+ mistakes, 0.5=1-2 mistakes, 1=none. Max 1.
-- personalisation: Used destination/occasion/customer detail. Max 2. Scores: 0, 1, or 2.
+- personalisation: Used destination, occasion, or personal customer detail to personalise the response. Max 2. Scores: 0, 1, or 2. If there is no destination, occasion, or personal detail available in the email to pick up on (e.g. a parking damage complaint with no trip detail mentioned), score 1 rather than penalising the agent for something that was not possible to personalise.
 - ai_tone: HX tone of voice, clear language. Max 0.5. Scores: 0 or 0.5.
 - uk_english: UK English used, no Americanised spelling. Max 0.5. Scores: 0 or 0.5.
-
+ 
 Return this exact JSON:
 {
   "scores": {
@@ -766,7 +766,7 @@ Return this exact JSON:
   "even_better_if": "2-3 specific, actionable improvements.",
   "advisories": ""
 }`;
-
+ 
   try {
     const res = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -777,31 +777,31 @@ Return this exact JSON:
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-sonnet-4-6',
         max_tokens: 4000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
-
+ 
     const data = await res.json();
     if (!res.ok) throw new Error(`API ${res.status}: ${data.error?.message || JSON.stringify(data.error)}`);
     if (!data.content?.length) throw new Error('Empty response from API');
-
+ 
     const text = data.content.map(b => b.text || '').join('');
     const result = JSON.parse(text.replace(/```json|```/g, '').trim());
-
+ 
     hideStatus();
     applyAIScores(result);
     document.getElementById('scoreBtn').disabled = false;
     document.getElementById('scorecard').scrollIntoView({ behavior: 'smooth' });
-
+ 
   } catch (err) {
     hideStatus();
     document.getElementById('scoreBtn').disabled = false;
     showError(err.message);
   }
 }
-
+ 
 function applyAIScores(result) {
   const s = result.scores;
   for (const key in s) {
@@ -810,7 +810,7 @@ function applyAIScores(result) {
     const row = document.getElementById(`row-${key}`);
     const reasonEl = document.getElementById(`reason-${key}`);
     if (!sel) continue;
-
+ 
     if (item.score !== null && item.score !== undefined) {
       sel.value = String(item.score);
       styleSelect(sel);
@@ -820,14 +820,14 @@ function applyAIScores(result) {
       }
     }
   }
-
+ 
   if (result.went_well) document.getElementById('wentWell').value = result.went_well;
   if (result.even_better_if) document.getElementById('evenBetter').value = result.even_better_if;
   if (result.advisories) document.getElementById('advisories').value = result.advisories;
-
+ 
   recalcAll();
 }
-
+ 
 // ── SCORING LOGIC ──
 function styleSelect(sel) {
   const v = sel.value; const max = parseFloat(sel.dataset.max);
@@ -839,12 +839,12 @@ function styleSelect(sel) {
   else if (n > 0) sel.classList.add('partial');
   else sel.classList.add('zero');
 }
-
+ 
 function updateScore(sel) {
   styleSelect(sel);
   recalcAll();
 }
-
+ 
 function recalcAll() {
   let grand = 0, grandMax = 0; let anyScored = false;
   ['systems','content','personal','ai'].forEach(sec => {
@@ -858,17 +858,17 @@ function recalcAll() {
     grandMax += secMax;
     document.getElementById(`sec-${sec}-display`).textContent = `${secTotal} / ${secMax}`;
   });
-
+ 
   const pct = grandMax > 0 ? Math.round((grand / grandMax) * 100) : 0;
   document.getElementById('liveScore').innerHTML = `${grand}<span> / ${grandMax}</span>`;
   document.getElementById('livePct').textContent = pct + '%';
-
+ 
   const pill = document.getElementById('passPill');
   if (!anyScored) { pill.className = 'pass-pill na'; pill.textContent = 'Enter scores'; }
   else if (pct >= 90) { pill.className = 'pass-pill pass'; pill.textContent = '✓ Pass'; }
   else { pill.className = 'pass-pill fail'; pill.textContent = '✗ Needs improvement'; }
 }
-
+ 
 function clearScores() {
   document.querySelectorAll('.score-select').forEach(s => { s.value = ''; s.className = 'score-select'; });
   document.querySelectorAll('.ai-reason').forEach(el => el.innerHTML = '');
@@ -878,7 +878,7 @@ function clearScores() {
   document.getElementById('advisories').value = '';
   recalcAll();
 }
-
+ 
 function copyFeedback() {
   const agent = document.getElementById('agentSelect').value || 'Agent';
   const caseNum = document.getElementById('caseNum').value || 'N/A';
@@ -893,7 +893,7 @@ function copyFeedback() {
   if (adv) text += `\n\nAdvisories:\n${adv}`;
   navigator.clipboard.writeText(text).then(() => alert('Feedback copied!')).catch(() => alert('Could not copy — please select and copy manually.'));
 }
-
+ 
 function resetForm() {
   if (!confirm('Reset everything? All scores and feedback will be cleared.')) return;
   clearScores();
@@ -908,10 +908,21 @@ function resetForm() {
   });
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
-
+ 
 function showStatus(msg) { const b = document.getElementById('statusBar'); b.className = 'status loading'; document.getElementById('statusText').textContent = msg; }
 function showError(msg) { const b = document.getElementById('statusBar'); b.className = 'status error'; document.getElementById('statusText').textContent = 'Error: ' + msg; }
 function hideStatus() { document.getElementById('statusBar').className = 'status hidden'; }
 </script>
 </body>
 </html>
+ 
+
+
+
+
+
+
+
+
+
+
