@@ -677,6 +677,59 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 <script>
 const SEC_MAX = { systems: 7, content: 4.5, personal: 9, ai: 1 };
 
+// ── ANONYMISER ──
+let anonymisedEmail = '';
+
+function anonymiseEmail(text) {
+  const removed = [];
+  let clean = text;
+  const emailRegex = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
+  const emails = clean.match(emailRegex) || [];
+  emails.forEach(e => { if (!removed.includes(e)) removed.push(e); });
+  clean = clean.replace(emailRegex, '[EMAIL REMOVED]');
+  const phoneRegex = /(\+44\s?|0)[\d\s\-\(\)]{9,13}\d/g;
+  const phones = clean.match(phoneRegex) || [];
+  phones.forEach(p => { const t = p.trim(); if (!removed.includes(t)) removed.push(t); });
+  clean = clean.replace(phoneRegex, '[PHONE REMOVED]');
+  const postcodeRegex = /\b[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}\b/gi;
+  const postcodes = clean.match(postcodeRegex) || [];
+  postcodes.forEach(p => { if (!removed.includes(p)) removed.push(p); });
+  clean = clean.replace(postcodeRegex, '[POSTCODE REMOVED]');
+  return { clean, removed };
+}
+
+function anonymiseAndScore() {
+  if (!apiKey) { alert('Please enter your Anthropic API key first.'); return; }
+  const email = document.getElementById('emailChain').value.trim();
+  if (!email) { alert('Please paste the email chain.'); return; }
+  const agent = document.getElementById('agentSelect').value;
+  if (!agent) { alert('Please select an agent.'); return; }
+  const { clean, removed } = anonymiseEmail(email);
+  anonymisedEmail = clean;
+  const preview = document.getElementById('anonPreview');
+  preview.innerHTML = clean
+    .replace(/\[EMAIL REMOVED\]/g, '<span class="redacted">📧 EMAIL REMOVED</span>')
+    .replace(/\[PHONE REMOVED\]/g, '<span class="redacted">📱 PHONE REMOVED</span>')
+    .replace(/\[POSTCODE REMOVED\]/g, '<span class="redacted">📍 POSTCODE REMOVED</span>');
+  const removedEl = document.getElementById('removedItems');
+  if (removed.length === 0) {
+    removedEl.innerHTML = '<span style="font-size:13px;color:var(--text-light)">No personal data automatically detected — please check manually.</span>';
+  } else {
+    removedEl.innerHTML = removed.map(r => `<span class="removed-item">✕ ${r}</span>`).join('');
+  }
+  document.getElementById('anonModal').classList.remove('hidden');
+}
+
+function closeAnonModal() {
+  document.getElementById('anonModal').classList.add('hidden');
+}
+
+function confirmAndScore() {
+  document.getElementById('anonModal').classList.add('hidden');
+  document.getElementById('emailChain').value = anonymisedEmail;
+  handleScore();
+}
+
 // ── API KEY ──
 let apiKey = sessionStorage.getItem('hx_qa_key') || '';
 if (apiKey) showKeyConfirmed();
