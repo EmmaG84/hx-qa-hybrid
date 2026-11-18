@@ -105,6 +105,11 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .status { border-radius: 8px; padding: 13px 18px; font-size: 14px; font-weight: 700; display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
 .status.loading { background: var(--blue-bg); color: var(--blue); }
 .status.error { background: var(--red-bg); color: var(--red); }
+.correction-log { border: 1px solid var(--grey-2); border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; background: var(--white); }
+.correction-log[data-state="saved"] { background: var(--green-bg); }
+.correction-log[data-state="pending"] { background: var(--orange-bg); }
+.correction-log p { margin: 5px 0; font-size: 13px; }
+.correction-log ul { margin: 8px 0 12px 20px; font-size: 13px; }
 .spinner { width: 16px; height: 16px; border: 2.5px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin 0.7s linear infinite; flex-shrink: 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -154,7 +159,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .legend-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
 
 @media print {
-  .header, .score-bar, .setup-panel, .input-card, .status, .action-bar, .btn-row, .legend { display: none !important; }
+  .header, .score-bar, .setup-panel, .input-card, .status, .action-bar, .btn-row, .legend, .correction-log, .modal-overlay { display: none !important; }
   body { background: white; }
   .page { padding: 0; max-width: 100%; }
   .card { box-shadow: none; break-inside: avoid; border: 1px solid #ddd; }
@@ -184,6 +189,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .modal-footer { padding: 16px 24px; border-top: 1px solid var(--grey-2); display: flex; gap: 10px; flex-wrap: wrap; }
 .redacted { background: #fff3cd; border-radius: 3px; padding: 1px 4px; font-weight: 700; color: #856404; font-size: 13px; }
 .anon-preview {
+  display: block; width: 100%; resize: vertical; min-height: 240px;
   background: var(--grey-4); border: 1px solid var(--grey-2);
   border-radius: 8px; padding: 14px; font-size: 13px;
   line-height: 1.7; white-space: pre-wrap; max-height: 320px;
@@ -193,6 +199,8 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
 .removed-list h4 { font-size: 12px; font-weight: 800; color: var(--purple); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
 .removed-item { display: inline-flex; align-items: center; gap: 6px; background: #fff3cd; border-radius: 6px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: #856404; margin: 3px; }
 .warning-box { background: var(--orange-bg); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: #7a4a00; margin-top: 12px; line-height: 1.5; }
+.privacy-check { display: flex; gap: 10px; align-items: flex-start; margin-top: 16px; font-size: 13px; font-weight: 700; }
+.privacy-extra { width: 100%; margin: 6px 0 10px; min-height: 65px; padding: 8px; border: 1px solid var(--grey-2); border-radius: 8px; font: inherit; }
 </style>
 </head>
 <body>
@@ -283,6 +291,7 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
       </div>
       <div class="btn-row">
         <button class="btn-primary" onclick="anonymiseAndScore()" id="scoreBtn">✨ Auto-score with AI</button>
+        <button class="btn-outline" onclick="openPrivacyReview()">Review privacy</button>
         <button class="btn-outline" onclick="manualOnly()">Score manually</button>
         <button class="btn-outline" onclick="loadDemo()">Load demo case</button>
       </div>
@@ -294,6 +303,17 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
     <div class="spinner"></div>
     <span id="statusText">Analysing email chain...</span>
   </div>
+
+  <section class="correction-log hidden" id="correctionLog" aria-labelledby="correctionLogTitle">
+    <strong id="correctionLogTitle">Correction log</strong>
+    <p id="correctionStatus" role="status" aria-live="polite"></p>
+    <p id="correctionStorageWarning" class="hidden">This browser could not save a recovery copy. Download the outstanding corrections before closing this page.</p>
+    <ul id="pendingCorrections"></ul>
+    <div class="btn-row hidden" id="correctionActions">
+      <button class="btn-outline" onclick="correctionQueue.retry()">Retry outstanding corrections</button>
+      <button class="btn-outline" onclick="downloadPendingCorrections()">Download outstanding corrections</button>
+    </div>
+  </section>
 
   <!-- SCORECARD (hidden until loaded) -->
   <div id="scorecard" class="hidden">
@@ -645,13 +665,13 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
   </div><!-- end scorecard -->
 </div>
 
-<!-- ANONYMISER MODAL -->
-<div class="modal-overlay hidden" id="anonModal">
+<!-- PRIVACY REVIEW -->
+<div class="modal-overlay hidden" id="anonModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
   <div class="modal">
     <div class="modal-head">
       <div>
-        <h3>🔒 GDPR Anonymiser</h3>
-        <p>Personal data detected and removed — please review before scoring</p>
+        <h3 id="privacyTitle">🔒 Privacy review</h3>
+        <p>Check and edit the complete thread before sending it for scoring</p>
       </div>
     </div>
     <div class="modal-body">
@@ -660,20 +680,28 @@ body { font-family: var(--font); background: var(--off-white); color: var(--text
         <div id="removedItems"></div>
       </div>
       <div class="warning-box">
-        ⚠ Please check the anonymised email below carefully. Customer names written in unusual ways may not have been detected automatically. If you spot anything, cancel and remove it manually before scoring.
+        Automatic checks can miss personal information, particularly unusual names, named houses and details within the story. Read the full preview and remove anything that could identify someone. Only the text in this preview will be sent for AI scoring.
       </div>
       <div style="margin-top:14px">
-        <div style="font-size:12px;font-weight:800;color:var(--purple);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;">Anonymised email preview</div>
-        <div class="anon-preview" id="anonPreview"></div>
+        <label for="anonPreview" style="font-size:12px;font-weight:800;color:var(--purple);">Editable email preview</label>
+        <textarea class="anon-preview" id="anonPreview" spellcheck="false" oninput="resetPrivacyConfirmation()"></textarea>
       </div>
+      <div style="margin-top:14px">
+        <label for="extraIdentifiers">Extra names, addresses or other details to remove, one per line</label>
+        <textarea class="privacy-extra" id="extraIdentifiers" placeholder="Add any details the automatic check missed" spellcheck="false" oninput="resetPrivacyConfirmation()"></textarea>
+        <button class="btn-outline" onclick="redactMore()">Remove these details from preview</button>
+      </div>
+      <label class="privacy-check"><input type="checkbox" id="privacyConfirmed" onchange="document.getElementById('confirmScoreBtn').disabled = !this.checked"/>I have checked the whole preview and removed any remaining identifying details.</label>
     </div>
     <div class="modal-footer">
-      <button class="btn-primary" onclick="confirmAndScore()">✓ Looks good — score this case</button>
-      <button class="btn-outline" onclick="closeAnonModal()">Cancel — edit manually</button>
+      <button class="btn-primary" id="confirmScoreBtn" onclick="confirmAndScore()" disabled>Score reviewed text</button>
+      <button class="btn-outline" onclick="closeAnonModal()">Cancel</button>
     </div>
   </div>
 </div>
 
+<script src="privacy.js"></script>
+<script src="override-log.js"></script>
 <script>
 const SEC_MAX = { systems: 7, content: 4.5, personal: 9, ai: 1 };
 
@@ -681,53 +709,81 @@ const SEC_MAX = { systems: 7, content: 4.5, personal: 9, ai: 1 };
 let anonymisedEmail = '';
 
 function anonymiseEmail(text) {
-  const removed = [];
-  let clean = text;
-  const emailRegex = /[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g;
-  const emails = clean.match(emailRegex) || [];
-  emails.forEach(e => { if (!removed.includes(e)) removed.push(e); });
-  clean = clean.replace(emailRegex, '[EMAIL REMOVED]');
-  const phoneRegex = /(\+44\s?|0)[\d\s\-\(\)]{9,13}\d/g;
-  const phones = clean.match(phoneRegex) || [];
-  phones.forEach(p => { const t = p.trim(); if (!removed.includes(t)) removed.push(t); });
-  clean = clean.replace(phoneRegex, '[PHONE REMOVED]');
-  const postcodeRegex = /\b[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}\b/gi;
-  const postcodes = clean.match(postcodeRegex) || [];
-  postcodes.forEach(p => { if (!removed.includes(p)) removed.push(p); });
-  clean = clean.replace(postcodeRegex, '[POSTCODE REMOVED]');
-  return { clean, removed };
+  const knownNames = [...document.getElementById('agentSelect').options].map(option => option.value).filter(Boolean);
+  return HXPrivacy.redact(text, { knownNames });
+}
+
+function showRemovedSummary(removed) {
+  const counts = {};
+  removed.forEach(item => { counts[item.type] = (counts[item.type] || 0) + 1; });
+  document.getElementById('removedItems').textContent = removed.length ?
+    Object.entries(counts).map(([type, count]) => `${type}: ${count}`).join(' · ') :
+    'No details automatically detected. Please check the whole preview.';
+}
+
+function resetPrivacyConfirmation() {
+  document.getElementById('privacyConfirmed').checked = false;
+  document.getElementById('confirmScoreBtn').disabled = true;
 }
 
 function anonymiseAndScore() {
   if (!apiKey) { alert('Please enter your Anthropic API key first.'); return; }
+  if (!document.getElementById('agentSelect').value) { alert('Please select an agent.'); return; }
+  openPrivacyReview();
+}
+
+function openPrivacyReview() {
   const email = document.getElementById('emailChain').value.trim();
   if (!email) { alert('Please paste the email chain.'); return; }
-  const agent = document.getElementById('agentSelect').value;
-  if (!agent) { alert('Please select an agent.'); return; }
   const { clean, removed } = anonymiseEmail(email);
   anonymisedEmail = clean;
-  const preview = document.getElementById('anonPreview');
-  preview.innerHTML = clean
-    .replace(/\[EMAIL REMOVED\]/g, '<span class="redacted">📧 EMAIL REMOVED</span>')
-    .replace(/\[PHONE REMOVED\]/g, '<span class="redacted">📱 PHONE REMOVED</span>')
-    .replace(/\[POSTCODE REMOVED\]/g, '<span class="redacted">📍 POSTCODE REMOVED</span>');
-  const removedEl = document.getElementById('removedItems');
-  if (removed.length === 0) {
-    removedEl.innerHTML = '<span style="font-size:13px;color:var(--text-light)">No personal data automatically detected — please check manually.</span>';
-  } else {
-    removedEl.innerHTML = removed.map(r => `<span class="removed-item">✕ ${r}</span>`).join('');
-  }
+  document.getElementById('anonPreview').value = clean;
+  document.getElementById('extraIdentifiers').value = '';
+  resetPrivacyConfirmation();
+  showRemovedSummary(removed);
   document.getElementById('anonModal').classList.remove('hidden');
+  document.getElementById('anonPreview').focus();
+}
+
+function redactMore() {
+  const preview = document.getElementById('anonPreview');
+  const extras = document.getElementById('extraIdentifiers').value.split('\n').map(value => value.trim()).filter(Boolean);
+  const result = HXPrivacy.redact(preview.value, { extraIdentifiers: extras });
+  preview.value = result.clean;
+  document.getElementById('extraIdentifiers').value = '';
+  showRemovedSummary(result.removed);
+  resetPrivacyConfirmation();
 }
 
 function closeAnonModal() {
   document.getElementById('anonModal').classList.add('hidden');
+  document.getElementById('anonPreview').value = '';
+  document.getElementById('extraIdentifiers').value = '';
+  anonymisedEmail = '';
+  resetPrivacyConfirmation();
+  document.getElementById('scoreBtn').focus();
 }
 
+document.getElementById('anonModal').addEventListener('keydown', event => {
+  if (event.key === 'Escape') { closeAnonModal(); return; }
+  if (event.key !== 'Tab') return;
+  const controls = [...event.currentTarget.querySelectorAll('textarea, input, button')].filter(control => !control.disabled);
+  const first = controls[0], last = controls[controls.length - 1];
+  if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+  else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+});
+
 function confirmAndScore() {
-  document.getElementById('anonModal').classList.add('hidden');
+  if (!document.getElementById('privacyConfirmed').checked) return;
+  if (document.getElementById('extraIdentifiers').value.trim()) { alert('Remove the extra details from the preview before scoring.'); return; }
+  if (!apiKey) { alert('Please save your Anthropic API key before scoring.'); return; }
+  if (!document.getElementById('agentSelect').value) { alert('Please select an agent.'); return; }
+  anonymisedEmail = document.getElementById('anonPreview').value.trim();
+  if (!anonymisedEmail) { alert('The reviewed text is empty.'); return; }
+  const reviewedEmail = anonymisedEmail;
   document.getElementById('emailChain').value = anonymisedEmail;
-  handleScore();
+  closeAnonModal();
+  handleScore(reviewedEmail);
 }
 
 // ── API KEY ──
@@ -814,13 +870,14 @@ function manualOnly() {
 }
 
 // ── AI SCORE ──
-async function handleScore() {
+async function handleScore(reviewedEmail) {
+  if (typeof reviewedEmail !== 'string' || !reviewedEmail.trim()) { anonymiseAndScore(); return; }
   if (!apiKey) {
     const go = confirm('No API key entered — switch to manual scoring?');
     if (go) manualOnly();
     return;
   }
-  const email = document.getElementById('emailChain').value.trim();
+  const email = reviewedEmail.trim();
   if (!email) { alert('Please paste the email chain.'); return; }
   const agent = document.getElementById('agentSelect').value;
   if (!agent) { alert('Please select an agent.'); return; }
@@ -918,8 +975,10 @@ Return this exact JSON:
 }
 
 // ── OVERRIDE LOGGING ──
-const SHEET_URL = 'https://script.google.com/a/macros/holidayextras.com/s/AKfycbzwBLv0r12xcrfXvc9LObk24Axww9v8SG5848jklqbKJEI42MrgXQF0-_FtMtU1sr1K/exec';
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbzwBLv0r12xcrfXvc9LObk24Axww9v8SG5848jklqbKJEI42MrgXQF0-_FtMtU1sr1K/exec';
 const aiScoreStore = {}; // stores AI suggested scores so we can detect overrides
+const lastReportedScores = {};
+let currentAudit = null;
 
 const CRITERION_LABELS = {
   subject_title: 'Subject title', resolved_quickly: 'Resolved quickly',
@@ -934,20 +993,55 @@ const CRITERION_LABELS = {
   care_notes: 'CARE notes', reclaim_code: 'Reclaim code', gdpr: 'GDPR check'
 };
 
-function logOverride(key, aiScore, humanScore, maxScore) {
-  const agent = document.getElementById('agentSelect').value || 'Unknown';
-  const caseId = document.getElementById('caseNum').value || 'Unknown';
-  const reviewer = document.getElementById('reviewerSelect').value || 'Unknown';
-  const criterion = CRITERION_LABELS[key] || key;
-  const date = new Date().toLocaleDateString('en-GB');
-
-  fetch(SHEET_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ date, agent, caseId, reviewer, criterion, aiScore, humanScore, maxScore })
-  }).catch(() => {}); // silent fail — don't interrupt reviewer workflow
+function renderCorrectionStatus(state) {
+  const panel = document.getElementById('correctionLog');
+  const pending = state.pending;
+  const saving = pending.filter(entry => entry.state === 'saving').length;
+  panel.classList.toggle('hidden', !pending.length && !state.confirmed && !state.storageError && !state.recoveryError);
+  panel.dataset.state = pending.length || state.storageError || state.recoveryError ? 'pending' : 'saved';
+  document.getElementById('correctionStatus').textContent = pending.length ?
+    `${saving ? 'Saving corrections. ' : ''}${pending.length} correction(s) awaiting confirmation from the shared log. ${state.storageError ? 'Download a recovery copy before closing this page.' : 'A recovery copy is kept on this device until confirmed.'}` :
+    state.recoveryError ? 'Previously stored corrections could not be read. They have been left untouched.' :
+    `${state.confirmed} correction(s) confirmed saved to the shared log.`;
+  document.getElementById('correctionStorageWarning').classList.toggle('hidden', !state.storageError);
+  document.getElementById('correctionActions').classList.toggle('hidden', !pending.length);
+  const list = document.getElementById('pendingCorrections');
+  list.replaceChildren();
+  pending.forEach(entry => {
+    const item = document.createElement('li');
+    const stateLabel = entry.state === 'failed' ? 'could not send' : entry.state === 'saving' ? 'saving' : 'not yet confirmed';
+    item.textContent = `${entry.criterion}: ${entry.aiScore} to ${entry.humanScore}, ${stateLabel}`;
+    list.appendChild(item);
+  });
 }
+
+const logTransport = HXOverrideLog.createBrowserTransport(SHEET_URL);
+const correctionQueue = HXOverrideLog.createQueue({
+  storage: { getItem: key => localStorage.getItem(key), setItem: (key, value) => localStorage.setItem(key, value), removeItem: key => localStorage.removeItem(key) },
+  ...logTransport, onChange: renderCorrectionStatus
+});
+
+function downloadPendingCorrections() {
+  const csv = HXOverrideLog.toCSV(correctionQueue.snapshot().pending);
+  const url = URL.createObjectURL(new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'hx-qa-outstanding-corrections.csv';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+function logOverride(key, aiScore, humanScore, maxScore) {
+  return correctionQueue.enqueue({ ...currentAudit, eventId: crypto.randomUUID(), recordedAt: new Date().toISOString(),
+    criterion: CRITERION_LABELS[key] || key, aiScore, humanScore, maxScore });
+}
+
+window.addEventListener('beforeunload', event => {
+  const state = correctionQueue.snapshot();
+  if (state.storageError && state.pending.length) { event.preventDefault(); event.returnValue = ''; }
+});
 
 function applyAIScores(result) {
   const s = result.scores;
@@ -958,13 +1052,14 @@ function applyAIScores(result) {
     const reasonEl = document.getElementById(`reason-${key}`);
     if (!sel) continue;
 
-    if (item.score !== null && item.score !== undefined) {
+    if (item && item.score !== null && item.score !== undefined && [...sel.options].some(option => option.value === String(item.score))) {
       sel.value = String(item.score);
       aiScoreStore[key] = String(item.score); // store AI score for override detection
+      lastReportedScores[key] = String(item.score);
       styleSelect(sel);
       if (row) { row.classList.remove('needs-check'); row.classList.add('ai-scored'); }
       if (reasonEl && item.reasoning) {
-        reasonEl.innerHTML = `<span class="ai-badge">✨ AI</span> ${item.reasoning}`;
+        reasonEl.textContent = 'AI: ' + item.reasoning;
       }
     }
   }
@@ -994,7 +1089,8 @@ function updateScore(sel) {
 
   // Check if this is an override of an AI score
   const key = sel.dataset.key;
-  if (key && aiScoreStore[key] !== undefined && sel.value !== '' && sel.value !== aiScoreStore[key]) {
+  if (key && aiScoreStore[key] !== undefined && sel.value !== '' && sel.value !== lastReportedScores[key]) {
+    lastReportedScores[key] = sel.value;
     logOverride(key, aiScoreStore[key], sel.value, sel.dataset.max);
   }
 }
@@ -1024,6 +1120,12 @@ function recalcAll() {
 }
 
 function clearScores() {
+  Object.keys(aiScoreStore).forEach(key => delete aiScoreStore[key]);
+  Object.keys(lastReportedScores).forEach(key => delete lastReportedScores[key]);
+  currentAudit = { auditId: crypto.randomUUID(), date: new Date().toLocaleDateString('en-GB'),
+    agent: document.getElementById('agentSelect').value || 'Unknown',
+    caseId: document.getElementById('caseNum').value || 'Unknown',
+    reviewer: document.getElementById('reviewerSelect').value || 'Unknown' };
   document.querySelectorAll('.score-select').forEach(s => { s.value = ''; s.className = 'score-select'; });
   document.querySelectorAll('.ai-reason').forEach(el => el.innerHTML = '');
   document.querySelectorAll('.crit-row.ai-scored').forEach(r => r.classList.remove('ai-scored'));
@@ -1069,3 +1171,4 @@ function hideStatus() { document.getElementById('statusBar').className = 'status
 </script>
 </body>
 </html>
+
